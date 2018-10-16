@@ -32,4 +32,5 @@
     <string name="action_sign_up_short">Register</string>
     <string name="api">http://134.157.121.205:8080/DAR_PROJECT</string>
 
+    <string name="title_activity_scrolling">Search</string>
 </resources>
