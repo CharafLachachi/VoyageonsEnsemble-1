@@ -3,6 +3,7 @@ package com.example.thamazgha.voyageonsensemble.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,13 +29,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.auth0.android.jwt.JWT;
 import com.example.thamazgha.voyageonsensemble.R;
+import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * A login screen that offers login via email/password.
@@ -68,12 +81,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -82,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
                 return false;
             }
-        });
+        });*/
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -350,5 +364,76 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+
+
+
+
+
+
+    private void loginHandler() {
+
+
+        final String userEmail = mEmailView.getText().toString();
+        final String userPassword = mPasswordView.getText().toString();
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("email", userEmail);
+        params.put("password", userEmail);
+
+        JSONObject paramJson = new JSONObject(params);
+
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("email",userEmail);
+            json.put("password",userPassword);
+            Toast.makeText(LoginActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String url = "http://134.157.123.150:8080/DAR_PROJECT/SignIn";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(LoginActivity.this, response.toString(), Toast.LENGTH_LONG).show();
+                        //register.setText("Response: " + response.toString().substring(0,10));
+                        JWT jwtInfoUser = null;
+                        try {
+                            jwtInfoUser = new JWT(response.get("token").toString());
+                            //jwt.getClaim("email");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Toast.makeText(LoginActivity.this, jwtInfoUser.getClaim("email").asString(), Toast.LENGTH_LONG).show();
+                        //startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+
+
+                        Intent intentDashboard = new Intent( LoginActivity.this, DashboardActivity.class);
+                        intentDashboard.putExtra(EXTRA_MESSAGE, jwtInfoUser);
+                        startActivityForResult(intentDashboard, 0);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "user inexistant", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        // Instantiate the RequestQueue.
+        QueueSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
 }
 
