@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.thamazgha.voyageonsensemble.R;
 import com.example.thamazgha.voyageonsensemble.tools.CustomAdapter;
+import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
 
 import org.json.JSONArray;
@@ -30,20 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    /**recyclerview*/
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-
-    private ArrayList<String> myDataset = new ArrayList<String>();/*= {"coucou","madame","monsieur","azul","mezgha","cheb","khaled","en","ce","moment",
-    "public", "class", "DashboardActivity" ,"extends" ,"AppCompatActivity", "implements", "NavigationView.",
-            "OnNavigationItemSelectedListener","private", "RecyclerView", "mRecyclerView","savedInstanceState",
-            "ActionBarDrawerToggle" ,"toggle" ,"=" ,"new", "ActionBarDrawerToggle","(","this"," drawer","toolbar" ,
-            "R.","string.","navigation","_drawer","_open" };*/
+    private CustomAdapter mCustomAdapter;
+    private ArrayList<PublicationItem> mPublicationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +49,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                DashHandler();
+                //  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+               // DashHandler();
             }
         });
 
@@ -71,22 +63,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        /**recyclerview**/
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        /** RecyclerView start*/
+        mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mPublicationList = new ArrayList<>();
 
-        for(int i =0;i<40;i++){
-            myDataset.add("hilooooow :)");
-        }
-        myDataset.add(" i'm here");
-        // specify an adapter (see also next example)
-        mAdapter = new CustomAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
+        DashHandler();
+        /** RecyclerView end*/
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -143,6 +131,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
     public void DashHandler() {
         JSONObject json = new JSONObject();
 
@@ -152,7 +142,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        final TextView tv = (TextView) findViewById(R.id.hello);
         String url = "http://192.168.1.44:8080/DAR_PROJECT/dashboard";
 
         //____________________________________
@@ -165,12 +154,26 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     for (int i = 0; i < response.length(); i++) {
 
                         JSONObject publication = response.getJSONObject(i);
-                        String userid = publication.getString("owner");
 
-                        Toast.makeText(DashboardActivity.this, userid, Toast.LENGTH_SHORT).show();
-                        tv.setText(userid);
 
+                        int pub_owner = publication.getInt("owner");
+                        double roomPrice = publication.getDouble("roomPrice");
+                        int nbPers = publication.getInt("nbPers");
+                        String checkOutDate = publication.getString("checkOutDate");
+                        String chekInDate = publication.getString("chekInDate");
+                        String city = publication.getString("city");
+                        String hotelName = publication.getString("hotelName");
+
+                        JSONObject weather = publication.getJSONObject("weather");
+                        String img_url = weather.getString("icon");
+
+                        mPublicationList.add(new PublicationItem(img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+
+                        //Toast.makeText(DashboardActivity.this, pub_owner, Toast.LENGTH_SHORT).show();
                     }
+
+                    mCustomAdapter = new CustomAdapter(DashboardActivity.this,mPublicationList);
+                    mRecyclerView.setAdapter(mCustomAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -178,8 +181,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                tv.setText(error.toString());
+               // Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
             }
         }
         );
@@ -189,7 +192,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
     }
-
 
 
 }

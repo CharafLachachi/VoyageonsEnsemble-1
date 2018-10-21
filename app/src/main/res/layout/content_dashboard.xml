@@ -8,12 +8,6 @@
     tools:context=".activities.DashboardActivity"
     tools:showIn="@layout/app_bar_dashboard">
 
-    <TextView
-        android:id="@+id/hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hello word !"/>
-
     <!-- A RecyclerView with some commonly used attributes -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
