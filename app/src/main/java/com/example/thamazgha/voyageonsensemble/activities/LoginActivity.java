@@ -3,10 +3,9 @@ package com.example.thamazgha.voyageonsensemble.activities;
 
 import android.support.v7.app.AppCompatActivity;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.auth0.android.jwt.JWT;
 import com.example.thamazgha.voyageonsensemble.R;
@@ -83,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             json.put("email",userEmail);
             json.put("password",userPassword);
-            Toast.makeText(LoginActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
 
 
 
@@ -92,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String url = "http://134.157.123.150:8080/DAR_PROJECT/SignIn";
+        String url = "http://192.168.1.44:8080/DAR_PROJECT/SignIn";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
 
@@ -123,7 +121,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
                         Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                        Toast.makeText(LoginActivity.this, "user inexistant", Toast.LENGTH_LONG).show();
+                        register.setText(error.toString());
+                        //Toast.makeText(LoginActivity.this, "user inexistant", Toast.LENGTH_LONG).show();
                     }
                 });
 
