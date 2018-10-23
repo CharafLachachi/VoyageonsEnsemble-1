@@ -1,6 +1,8 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.thamazgha.voyageonsensemble.R;
 import com.example.thamazgha.voyageonsensemble.tools.CustomAdapter;
+import com.example.thamazgha.voyageonsensemble.tools.DownloadPublicationsTask;
 import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
 
@@ -31,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private RecyclerView mRecyclerView;
@@ -70,10 +74,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         mPublicationList = new ArrayList<>();
 
-        DashHandler();
+        //DashHandler();
         /** RecyclerView end*/
     }
-
 
 
     @Override
@@ -190,6 +193,23 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
 
+
+    }
+
+
+
+    public void startAsyncTask(View v){
+        mCustomAdapter = new CustomAdapter(DashboardActivity.this,mPublicationList);
+        mRecyclerView.setAdapter(mCustomAdapter);
+
+        DownloadPublicationsTask task = new DownloadPublicationsTask(this);
+        try {
+            mPublicationList = task.execute(1).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
