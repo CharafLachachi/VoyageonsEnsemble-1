@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.thamazgha.voyageonsensemble.R;
 import com.example.thamazgha.voyageonsensemble.activities.DashboardActivity;
+import com.example.thamazgha.voyageonsensemble.services.DashboardService;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
 import com.squareup.picasso.Picasso;
 
@@ -33,10 +34,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
     private ArrayList<PublicationItem> publicationsList;
     protected WeakReference<DashboardActivity> DAshboardActivityWeakReference;
 
+    DashboardService dashboardService;
+
     public CustomAdapter(Context context, ArrayList<PublicationItem> publicationsList,DashboardActivity dashboardActivity) {
         this.context = context;
         this.publicationsList = publicationsList;
         this.DAshboardActivityWeakReference = new WeakReference<DashboardActivity>(dashboardActivity);
+        this.dashboardService = new DashboardService(publicationsList,this.DAshboardActivityWeakReference);
     }
 
 
@@ -76,46 +80,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
             public void onClick(View v) {
                 Log.d("msg du bouton join",publicationViewHolder.pub_owner.getText().toString());
                 Toast.makeText(context, hotelName, Toast.LENGTH_SHORT).show();
-                joinHandler(1, pub_id,position);
+                dashboardService.joinHandler(1, pub_id,position);
 
             }
 
 
         });
     }
-    private void joinHandler(int abo_id, int pub_id, int position) {
-        DashboardActivity activity = DAshboardActivityWeakReference.get();
-        Toast.makeText(activity, "hello from join", Toast.LENGTH_SHORT).show();
-        String url ="http://192.168.1.44:8080/DAR_PROJECT/join";
-        JSONObject json = new JSONObject();
 
-        final int pos = position;
-        try {
-
-            //TODO recuperer userID apartir de connexionactivity
-            json.put("userid", 1);
-            json.put("pubid",pub_id);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Me : server responce",response.toString());
-                        publicationsList.get(pos).setNbPers(publicationsList.get(pos).getNbPers()+1);
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("me : errorCustomAdapter","jsonObjectRequest");
-                    }
-                });
-
-        QueueSingleton.getInstance(activity).addToRequestQueue(jsonObjectRequest);
-    }
 
     @Override
     public int getItemCount() {
