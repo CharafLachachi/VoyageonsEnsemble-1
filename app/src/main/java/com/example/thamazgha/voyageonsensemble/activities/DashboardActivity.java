@@ -1,12 +1,11 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,25 +15,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.thamazgha.voyageonsensemble.R;
+import com.example.thamazgha.voyageonsensemble.beans.Publication;
 import com.example.thamazgha.voyageonsensemble.tools.CustomAdapter;
 import com.example.thamazgha.voyageonsensemble.tools.DownloadPublicationsTask;
 import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private RecyclerView mRecyclerView;
@@ -54,7 +63,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onClick(View view) {
                 //  Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-               // DashHandler();
+                DashHandler();
+                //gsonmethod();
             }
         });
 
@@ -71,11 +81,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mPublicationList = new ArrayList<>();
-
-        //DashHandler();
-        /** RecyclerView end*/
+//        DashHandler();
+//        /** RecyclerView END*/
     }
 
 
@@ -140,25 +148,27 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         JSONObject json = new JSONObject();
 
         try {
+
+            //TODO recuperer userID apartir de connexionactivity
             json.put("userid", 1);
             Toast.makeText(DashboardActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = "http://192.168.1.44:8080/DAR_PROJECT/dashboard";
+        String url = getString(R.string.api) + "/dashboard";
 
-        //____________________________________
+
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
                 try {
-
+                    mCustomAdapter = new CustomAdapter(DashboardActivity.this, mPublicationList,DashboardActivity.this);
+                    mRecyclerView.setAdapter(mCustomAdapter);
+                    Log.e("tailllll : ",Integer.toString(response.length()));
                     for (int i = 0; i < response.length(); i++) {
 
                         JSONObject publication = response.getJSONObject(i);
-
-
                         int pub_owner = publication.getInt("owner");
                         double roomPrice = publication.getDouble("roomPrice");
                         int nbPers = publication.getInt("nbPers");
@@ -168,15 +178,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         String hotelName = publication.getString("hotelName");
 
                         JSONObject weather = publication.getJSONObject("weather");
-                        String img_url = weather.getString("icon");
+                        String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
 
-                        mPublicationList.add(new PublicationItem(img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+                        int pub_id = publication.getInt("pub_id");
+                        Log.d("puuuuuuuuuuuuuuuuub",Integer.toString(pub_id));
 
+                        mPublicationList.add(new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+                        mCustomAdapter.notifyDataSetChanged();
                         //Toast.makeText(DashboardActivity.this, pub_owner, Toast.LENGTH_SHORT).show();
                     }
 
-                    mCustomAdapter = new CustomAdapter(DashboardActivity.this,mPublicationList);
-                    mRecyclerView.setAdapter(mCustomAdapter);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -184,7 +197,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               // Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         }
@@ -192,24 +205,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
-
-
-    }
-
-
-
-    public void startAsyncTask(View v){
-        mCustomAdapter = new CustomAdapter(DashboardActivity.this,mPublicationList);
-        mRecyclerView.setAdapter(mCustomAdapter);
-
-        DownloadPublicationsTask task = new DownloadPublicationsTask(this);
-        try {
-            mPublicationList = task.execute(1).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 

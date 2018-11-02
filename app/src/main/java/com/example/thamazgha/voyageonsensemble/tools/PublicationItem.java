@@ -2,14 +2,20 @@ package com.example.thamazgha.voyageonsensemble.tools;
 
 public class PublicationItem {
 
+    private int pub_id;
     private String img_url;
     private int pub_owner;
     private double roomPrice;
     private int nbPers;
+    private String checkOutDate;
+    private String chekInDate;
+    private String city;
+    private String hotelName;
 
-    public PublicationItem(String img_url, int pub_owner, double roomPrice,
+    public PublicationItem(int pub_id, String img_url, int pub_owner, double roomPrice,
                            int nbPers, String checkOutDate, String chekInDate,
                            String city, String hotelName) {
+        this.pub_id = pub_id;
         this.img_url = img_url;
         this.pub_owner = pub_owner;
         this.roomPrice = roomPrice;
@@ -20,10 +26,6 @@ public class PublicationItem {
         this.hotelName = hotelName;
     }
 
-    private String checkOutDate;
-    private String chekInDate;
-    private String city;
-    private String hotelName;
 
     public String getImg_url() {
         return img_url;
@@ -89,7 +91,12 @@ public class PublicationItem {
         this.hotelName = hotelName;
     }
 
+    public int getPub_id() {
+        return pub_id;
+    }
 
-
+    public void setPub_id(int pub_id) {
+        this.pub_id = pub_id;
+    }
 
 }

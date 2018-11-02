@@ -2,8 +2,6 @@ package com.example.thamazgha.voyageonsensemble.tools;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -51,11 +49,11 @@ public class DownloadPublicationsTask extends AsyncTask<Integer,Void,ArrayList<P
                         String chekInDate = publication.getString("chekInDate");
                         String city = publication.getString("city");
                         String hotelName = publication.getString("hotelName");
-
+                        int pub_id = publication.getInt("pub_id");
                         JSONObject weather = publication.getJSONObject("weather");
                         String img_url = weather.getString("icon");
 
-                        publications_local_list.add(new PublicationItem(img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+                        publications_local_list.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -77,6 +75,7 @@ public class DownloadPublicationsTask extends AsyncTask<Integer,Void,ArrayList<P
         }else
         {
             QueueSingleton.getInstance(activity).addToRequestQueue(jsonArrayRequest);
+            //Log.e("add request----",jsonArrayRequest)
         }
 
 
