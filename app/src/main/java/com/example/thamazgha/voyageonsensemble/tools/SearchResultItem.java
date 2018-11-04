@@ -1,32 +1,21 @@
 package com.example.thamazgha.voyageonsensemble.tools;
 
-public class PublicationItem {
+public class SearchResultItem {
 
-    private int pub_id;
     private String img_url;
     private double roomPrice;
-    private int nbPers;
     private String checkOutDate;
     private String chekInDate;
     private String city;
     private String hotelName;
 
-    private String userNameOwner;
-
-
-
-    public PublicationItem(int pub_id, String img_url, String userNameOwner, double roomPrice,
-                           int nbPers, String checkOutDate, String chekInDate,
-                           String city, String hotelName) {
-        this.pub_id = pub_id;
+    public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName) {
         this.img_url = img_url;
         this.roomPrice = roomPrice;
-        this.nbPers = nbPers;
         this.checkOutDate = checkOutDate;
         this.chekInDate = chekInDate;
         this.city = city;
         this.hotelName = hotelName;
-        this.userNameOwner = userNameOwner;
     }
 
 
@@ -44,14 +33,6 @@ public class PublicationItem {
 
     public void setRoomPrice(double roomPrice) {
         this.roomPrice = roomPrice;
-    }
-
-    public int getNbPers() {
-        return nbPers;
-    }
-
-    public void setNbPers(int nbPers) {
-        this.nbPers = nbPers;
     }
 
     public String getCheckOutDate() {
@@ -86,19 +67,5 @@ public class PublicationItem {
         this.hotelName = hotelName;
     }
 
-    public int getPub_id() {
-        return pub_id;
-    }
 
-    public void setPub_id(int pub_id) {
-        this.pub_id = pub_id;
-    }
-
-    public String getUserNameOwner() {
-        return userNameOwner;
-    }
-
-    public void setUserNameOwner(String userNameOwner) {
-        this.userNameOwner = userNameOwner;
-    }
 }

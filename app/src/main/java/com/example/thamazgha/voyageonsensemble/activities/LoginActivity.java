@@ -1,11 +1,14 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -38,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button loginButton;
     private TextView register;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
 
 
     @Override
@@ -81,16 +86,12 @@ public class LoginActivity extends AppCompatActivity {
         try {
             json.put("email",userEmail);
             json.put("password",userPassword);
-            //Toast.makeText(LoginActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
-
-
-
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        String url = "http://192.168.1.44:8080/DAR_PROJECT/SignIn";
+        String url = getString(R.string.api)+"/SignIn";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
 
@@ -106,13 +107,18 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        //Toast.makeText(LoginActivity.this, jwtInfoUser.getClaim("email").asString(), Toast.LENGTH_LONG).show();
+
+                        Toast.makeText(LoginActivity.this, jwtInfoUser.getClaim("email").asString(), Toast.LENGTH_LONG).show();
                         //startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
 
 
                         Intent intentDashboard = new Intent( LoginActivity.this, DashboardActivity.class);
-                        intentDashboard.putExtra(EXTRA_MESSAGE, jwtInfoUser);
                         startActivityForResult(intentDashboard, 0);
+
+                        saveLocalStrorage(jwtInfoUser);
+
+
+
 
                     }
                 }, new Response.ErrorListener() {
@@ -128,6 +134,15 @@ public class LoginActivity extends AppCompatActivity {
 
         // Instantiate the RequestQueue.
         QueueSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void saveLocalStrorage(JWT jwtInfoUser) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("token",jwtInfoUser.toString());
+        editor.apply();
+        Log.d("token",jwtInfoUser.toString());
     }
 
     @Override

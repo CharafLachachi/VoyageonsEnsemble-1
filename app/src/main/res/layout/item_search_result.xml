@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
     android:paddingBottom="16dp"
     android:background="@drawable/layaout_bg"
-    android:id="@+id/parent_layaout"
-    >
-
-    <TextView
-        android:id="@+id/owner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Mezgha"
-        android:textSize="16dp"
-        android:textStyle="bold|italic"
-        android:textColor="@android:color/black"/>
+    android:id="@+id/item_search_result">
 
     <ImageView
         android:id="@+id/meteo"
@@ -61,16 +49,6 @@
         app:layout_constraintTop_toBottomOf="@id/city"
         android:textColor="@android:color/black"/>
 
-    <TextView
-        android:id="@+id/nbPrs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="4 participants"
-        app:layout_constraintLeft_toRightOf="@id/meteo"
-        app:layout_constraintTop_toBottomOf="@id/chekInDate"
-        android:textColor="@android:color/black"/>
-
 
     <TextView
         android:id="@+id/roomPrice"
@@ -79,7 +57,7 @@
         android:layout_marginLeft="10dp"
         android:text="No price"
         app:layout_constraintLeft_toRightOf="@id/meteo"
-        app:layout_constraintTop_toBottomOf="@id/nbPrs"
+        app:layout_constraintTop_toBottomOf="@id/chekInDate"
         android:textColor="@android:color/black"/>
 
 
@@ -94,30 +72,17 @@
         android:textColor="@android:color/black"/>
 
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/meteo"
-        android:layout_margin="10dp">
+
         <Button
-            android:id="@+id/join"
+            android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/quit"
-            android:text="Join"
+            app:layout_constraintTop_toBottomOf="@+id/hotelName"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="Share"
             style="?android:textAppearanceSmall"
             android:textColor="@color/colorText"
             android:background="#e6c229"/>
 
-        <Button
-            android:id="@+id/quit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="Quit"
-            style="?android:textAppearanceSmall"
-            android:textColor="@color/colorText"
-            android:background="#e6c229"/>
 
-    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

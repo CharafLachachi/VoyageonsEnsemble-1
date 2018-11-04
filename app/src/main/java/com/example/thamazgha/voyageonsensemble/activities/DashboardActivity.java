@@ -1,6 +1,9 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,30 +21,19 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.auth0.android.jwt.JWT;
 import com.example.thamazgha.voyageonsensemble.R;
-import com.example.thamazgha.voyageonsensemble.beans.Publication;
-import com.example.thamazgha.voyageonsensemble.tools.CustomAdapter;
-import com.example.thamazgha.voyageonsensemble.tools.DownloadPublicationsTask;
+import com.example.thamazgha.voyageonsensemble.adapters.CustomAdapter;
 import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -49,6 +41,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private RecyclerView mRecyclerView;
     private CustomAdapter mCustomAdapter;
     private ArrayList<PublicationItem> mPublicationList;
+
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+
+
+    String jwtUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +82,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         mPublicationList = new ArrayList<>();
 //        DashHandler();
 //        /** RecyclerView END*/
+
+        /*get token*/
+
+        final Intent intent = getIntent();
+        //jwtUser = intent.getStringExtra(LoginActivity.EXTRA_MESSAGE);
+
+        jwtUser = getLocalStorage();
+    }
+
+    private String getLocalStorage() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Log.d("tokenn",sharedPreferences.getString("token",""));
+        return sharedPreferences.getString("token","");
     }
 
 
@@ -147,16 +158,16 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void DashHandler() {
         JSONObject json = new JSONObject();
 
-        try {
+        JWT jwtuser = new JWT(jwtUser);
 
-            //TODO recuperer userID apartir de connexionactivity
-            json.put("userid", 1);
+        Log.e("jwttt",jwtuser.getClaim("id").asString());
+        try {
+            json.put("userid", jwtuser.getClaim("id").asString());
             Toast.makeText(DashboardActivity.this, json.toString(), Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String url = getString(R.string.api) + "/dashboard";
-
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
 
@@ -165,11 +176,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 try {
                     mCustomAdapter = new CustomAdapter(DashboardActivity.this, mPublicationList,DashboardActivity.this);
                     mRecyclerView.setAdapter(mCustomAdapter);
-                    Log.e("tailllll : ",Integer.toString(response.length()));
+
                     for (int i = 0; i < response.length(); i++) {
 
                         JSONObject publication = response.getJSONObject(i);
-                        int pub_owner = publication.getInt("owner");
+                        String pub_owner = publication.getString("userNameOwner");
                         double roomPrice = publication.getDouble("roomPrice");
                         int nbPers = publication.getInt("nbPers");
                         String checkOutDate = publication.getString("checkOutDate");
@@ -181,14 +192,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
 
                         int pub_id = publication.getInt("pub_id");
-                        Log.d("puuuuuuuuuuuuuuuuub",Integer.toString(pub_id));
 
                         mPublicationList.add(new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
                         mCustomAdapter.notifyDataSetChanged();
-                        //Toast.makeText(DashboardActivity.this, pub_owner, Toast.LENGTH_SHORT).show();
                     }
-
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

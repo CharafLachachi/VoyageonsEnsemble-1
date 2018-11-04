@@ -42,7 +42,7 @@ public class DownloadPublicationsTask extends AsyncTask<Integer,Void,ArrayList<P
                     for (int i = 0; i < response.length(); i++) {
 
                         JSONObject publication = response.getJSONObject(i);
-                        int pub_owner = publication.getInt("owner");
+                        String pub_owner = publication.getString("userNameOwner");
                         double roomPrice = publication.getDouble("roomPrice");
                         int nbPers = publication.getInt("nbPers");
                         String checkOutDate = publication.getString("checkOutDate");
