@@ -1,6 +1,7 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,7 +54,8 @@ public class SearchActivity extends AppCompatActivity implements
     private TextView timeTextView;
     private boolean mAutoHighlight;
     private Button search;
-
+    private String localStorage ;
+    public static final String SHARED_PREFS = "sharedPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,8 @@ public class SearchActivity extends AppCompatActivity implements
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSearchResultsList = new ArrayList<SearchResultItem>();
 
-        mSearchResultsAdapter = new SearchResultsAdapter(this, mSearchResultsList);
+        localStorage = getLocalStorage();
+        mSearchResultsAdapter = new SearchResultsAdapter(this, mSearchResultsList,localStorage,this);
         mRecyclerView.setAdapter(mSearchResultsAdapter);
 
 
@@ -132,7 +135,11 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 
-
+    private String getLocalStorage() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        Log.d("tokenn",sharedPreferences.getString("token",""));
+        return sharedPreferences.getString("token","");
+    }
 
 
 

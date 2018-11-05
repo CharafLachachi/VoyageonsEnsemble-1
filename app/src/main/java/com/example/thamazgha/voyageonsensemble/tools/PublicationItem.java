@@ -15,6 +15,7 @@ public class PublicationItem {
 
 
 
+
     public PublicationItem(int pub_id, String img_url, String userNameOwner, double roomPrice,
                            int nbPers, String checkOutDate, String chekInDate,
                            String city, String hotelName) {
@@ -101,4 +102,5 @@ public class PublicationItem {
     public void setUserNameOwner(String userNameOwner) {
         this.userNameOwner = userNameOwner;
     }
+
 }

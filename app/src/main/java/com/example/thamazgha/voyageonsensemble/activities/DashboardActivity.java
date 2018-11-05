@@ -1,7 +1,6 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -179,8 +178,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                     for (int i = 0; i < response.length(); i++) {
 
+
                         JSONObject publication = response.getJSONObject(i);
-                        String pub_owner = publication.getString("userNameOwner");
+                        Log.e("publication : ",publication.toString());
+                        String pub_owner = publication.getString("owner");
                         double roomPrice = publication.getDouble("roomPrice");
                         int nbPers = publication.getInt("nbPers");
                         String checkOutDate = publication.getString("checkOutDate");
@@ -209,7 +210,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
         }
         );
-
 
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
 

@@ -1,7 +1,5 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
-
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -92,6 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         String url = getString(R.string.api)+"/SignIn";
+
+
+
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, url, json, new Response.Listener<JSONObject>() {
 
@@ -131,6 +134,10 @@ public class LoginActivity extends AppCompatActivity {
                         //Toast.makeText(LoginActivity.this, "user inexistant", Toast.LENGTH_LONG).show();
                     }
                 });
+
+       // jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+               // DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                //DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Instantiate the RequestQueue.
         QueueSingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);

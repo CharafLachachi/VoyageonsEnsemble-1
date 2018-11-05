@@ -7,8 +7,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Sign in</string>
-    <!--// hello-->
-
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -32,4 +30,10 @@
     <string name="action_sign_up_short">Register</string>
     <string name="api">http://192.168.1.44:8080/DAR_PROJECT</string>
     <string name="title_activity_scrolling">Search</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="action_example">Example action</string>
 </resources>
