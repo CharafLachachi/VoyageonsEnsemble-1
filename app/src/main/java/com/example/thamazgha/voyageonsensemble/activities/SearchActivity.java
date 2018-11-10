@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity implements
         Log.d("tokenn",sharedPreferences.getString("token",""));
         //return sharedPreferences.getString("token","");
         //TODO just for test | modify this later
-        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbWUiOiJtZXpnaGEgIiwiaWQiOjEsImVtYWlsIjoic21haWwudGhhbWF6Z2hhQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiTWV6Z2hhYSIsImxhc3RuYW1lIjoibWV6Z2hhICJ9.kHqTgCvMJKpEIpqNSx9Bgc_f-AcKeUE6EScEjEIXskI";
+        return sharedPreferences.getString("token", "");
     }
 
 

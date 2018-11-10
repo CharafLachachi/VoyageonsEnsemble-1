@@ -115,17 +115,13 @@ public class LoginActivity extends AppCompatActivity {
                         //startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
 
 
-                        Intent intentDashboard = new Intent( LoginActivity.this, DashboardActivity.class);
+                        Intent intentDashboard = new Intent( LoginActivity.this, MainActivity.class);
                         startActivityForResult(intentDashboard, 0);
 
                         saveLocalStrorage(jwtInfoUser);
 
-
-
-
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error

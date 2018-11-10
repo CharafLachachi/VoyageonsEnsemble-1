@@ -56,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
         mPublicationList = new ArrayList<>();
         mCustomAdapter = new CustomAdapter(MainActivity.this, mPublicationList, MainActivity.this);
         mRecyclerView.setAdapter(mCustomAdapter);
-    DashHandler();
+
 
         /**localStorage*/
 
         jwtUser = getLocalStorage();
+        DashHandler();
     }
 
     private String getLocalStorage() {
@@ -88,11 +89,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONArray response) {
                 try {
-
-
                     for (int i = 0; i < response.length(); i++) {
-
-
                         JSONObject publication = response.getJSONObject(i);
                         Log.e("publication : ", publication.toString());
                         String pub_owner = publication.getString("owner");
@@ -108,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
                         int pub_id = publication.getInt("pub_id");
 
+                        getAbonneName(publication);
                         mPublicationList.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
                         mCustomAdapter.notifyDataSetChanged();
                     }
@@ -126,6 +124,18 @@ public class MainActivity extends AppCompatActivity {
         );
 
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
+
+    }
+
+    private void getAbonneName(JSONObject publication) {
+        try {
+            String owner = publication.getString("owner");
+            JSONObject abonnes = publication.getJSONObject("abonnes");
+
+            Log.i("abonnes",abonnes.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -161,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Do you want to exit?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
 
-                Intent intentLogin = new Intent(MainActivity.this,LoginActivity.class);
+                Intent intentLogin = new Intent(MainActivity.this, LoginActivity.class);
                 intentLogin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
                 startActivity(intentLogin);
                 finish();
@@ -189,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AlertDialog alert=builder.create();
+        AlertDialog alert = builder.create();
         alert.show();
 
     }
