@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class DownloadPublicationsTask extends AsyncTask<Integer,Void,ArrayList<PublicationItem>> {
     protected static String url = "http://134.157.255.38:8080/DAR_PROJECT/dashboard";
 
-    //TO DO add textView that i will modify in asyncTask and search for a way to launch an asyncTask
+    //TO DO add textView that i will modify in asyncTask and ic_search for a way to launch an asyncTask
     public DownloadPublicationsTask(DashboardActivity dashboardActivity) {
         this.DAshboardActivityWeakReference = new WeakReference<DashboardActivity>(dashboardActivity);
     }

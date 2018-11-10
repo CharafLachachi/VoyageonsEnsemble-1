@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -35,18 +36,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultViewHolder>{
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchResultViewHolder> {
 
     public static final String SHARED_PREFS = "sharedPrefs";
-    private Context context;
     public ArrayList<SearchResultItem> searchresultlist;
-    private JWT localStorage;
-
     public WeakReference<SearchActivity> SearchActivityWeakReference;
+    private Context context;
+    private JWT localStorage;
+     String api ;
 
     public SearchResultsAdapter(Context context, ArrayList<SearchResultItem> searchresultlist,
                                 String localStorage, SearchActivity searchActivity) {
@@ -54,7 +59,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         this.searchresultlist = searchresultlist;
         this.localStorage = new JWT(localStorage);
         this.SearchActivityWeakReference = new WeakReference<SearchActivity>(searchActivity);
-
+        api = context.getString(R.string.api)+"";
     }
 
     @NonNull
@@ -67,26 +72,40 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @Override
     public void onBindViewHolder(@NonNull SearchResultViewHolder searchResultViewHolder, final int position) {
         SearchResultItem currentItem = searchresultlist.get(position);
-        final int pos =position ;
+        final int pos = position;
         String img_url = currentItem.getImg_url();
         double roomPrice = currentItem.getRoomPrice();
-        String checkOutDate = currentItem.getCheckOutDate();
-        String chekInDate = currentItem.getChekInDate();
+        final String checkOutDate = currentItem.getCheckOutDate();
+        final String chekInDate = currentItem.getChekInDate();
         String city = currentItem.getCity();
         final String hotelName = currentItem.getHotelName();
 
-        searchResultViewHolder.roomPrice.setText("Price : "+roomPrice);
+        searchResultViewHolder.roomPrice.setText("Price : " + roomPrice);
         searchResultViewHolder.checkOutDate.setText(checkOutDate);
         searchResultViewHolder.chekInDate.setText(chekInDate);
-        searchResultViewHolder.city.setText("Destination : "+city);
-        searchResultViewHolder.hotelName.setText("Hotel : "+hotelName);
+        searchResultViewHolder.city.setText("Destination : " + city);
+        searchResultViewHolder.hotelName.setText("Hotel : " + hotelName);
         Picasso.with(context).load(img_url).into(searchResultViewHolder.meteo);
 
-        final String url = Resources.getSystem().getString(R.string.api);
+
         searchResultViewHolder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              shareHAndler(pos);
+                shareHAndler(pos);
+                long checkI = 0, checkO = 0;
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date ci = f.parse(chekInDate);
+                    checkI = ci.getTime();
+
+                    Date co = f.parse(checkOutDate);
+                    checkO = co.getTime();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                onAddEventClicked("city", checkI, checkO);
             }
         });
 
@@ -97,10 +116,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
 
         SearchResultItem currentItem = searchresultlist.get(pos);
-        currentItem.setUserId("");
-
+        currentItem.setIdUser("1");/*this.localStorage.getClaim("id").asString()*/
         String currentJson = new Gson().toJson(currentItem);
-        currentItem.setUserId(this.localStorage.getClaim("id").asString());
+
         JSONObject json = null;
         try {
             json = new JSONObject(currentJson);
@@ -109,13 +127,12 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         }
 
 
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, Resources.getSystem().getString(R.string.api),json , new Response.Listener<JSONObject>() {
+                (Request.Method.POST, api+"/sharePublication", json, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i("yes",response.toString());
+                        Log.i("yes", response.toString());
 
                     }
                 }, new Response.ErrorListener() {
@@ -134,9 +151,24 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         return this.searchresultlist.size();
     }
 
+    public void onAddEventClicked(String dest, long checkI, long checkO) {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setType("vnd.android.cursor.item/event");
 
+        Calendar cal = Calendar.getInstance();
+        long startTime = cal.getTimeInMillis();
+        long endTime = cal.getTimeInMillis() + 60 * 60 * 1000;
 
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, checkI);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, checkO);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
+        intent.putExtra(CalendarContract.Events.TITLE, "Voyage");
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, "Destination :" + dest);
+        intent.putExtra(CalendarContract.Events.CALENDAR_COLOR, "#e6c229");
+
+        context.startActivity(intent);
+    }
 
     public static class SearchResultViewHolder extends RecyclerView.ViewHolder {
 
@@ -162,5 +194,4 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             parentLayaout = itemView.findViewById(R.id.item_search_result);
         }
     }
-
 }

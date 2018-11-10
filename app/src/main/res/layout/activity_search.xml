@@ -6,19 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".activities.SearchActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellowButton"
+        android:minHeight="?attr/actionBarSize" />
+
+
     <RelativeLayout
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@color/colorSearchBackground">
 
-        <EditText
+
+
+        <Button
             android:id="@+id/destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:background="@color/graylight"
-            android:hint="Saisissez votre destination" />
+            android:hint="Choisissez votre destination" />
 
         <LinearLayout
             android:id="@+id/dateLayout"

@@ -1,11 +1,13 @@
 package com.example.thamazgha.voyageonsensemble.activities;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,24 +51,31 @@ public class SearchActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private SearchResultsAdapter mSearchResultsAdapter;
     private ArrayList<SearchResultItem> mSearchResultsList;
-    private EditText destination;
+    private Button destination;
     private TextView dateTextView;
     private TextView timeTextView;
     private boolean mAutoHighlight;
     private Button search;
     private String localStorage ;
     public static final String SHARED_PREFS = "sharedPrefs";
+    Toolbar toolbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        urlsearch = getString(R.string.api) + "/search";
+        /*toolbar*/
+        toolbar = (Toolbar) findViewById(R.id.toolbar_search);
+        setSupportActionBar(toolbar);
+
+        urlsearch = getString(R.string.api) + "/ic_search";
 
         searchService = new SearchService(this);
         dateButton = (ImageView) findViewById(R.id.dateButton);
         dateTextView = (TextView) findViewById(R.id.date_range);
-        destination = (EditText)  findViewById(R.id.destination);
+        destination = (Button)  findViewById(R.id.destination);
         search = (Button) findViewById(R.id.search);
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
@@ -113,6 +122,17 @@ public class SearchActivity extends AppCompatActivity implements
         });
 
 
+        destination.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchActivity.this, MapsActivity.class);
+                //EditText editText = (EditText) findViewById(R.id.editText);
+                //String message = editText.getText().toString();
+                //intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+
+            }
+        });
     }
 
 
@@ -138,7 +158,9 @@ public class SearchActivity extends AppCompatActivity implements
     private String getLocalStorage() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
         Log.d("tokenn",sharedPreferences.getString("token",""));
-        return sharedPreferences.getString("token","");
+        //return sharedPreferences.getString("token","");
+        //TODO just for test | modify this later
+        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmaXJzdG5hbWUiOiJtZXpnaGEgIiwiaWQiOjEsImVtYWlsIjoic21haWwudGhhbWF6Z2hhQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiTWV6Z2hhYSIsImxhc3RuYW1lIjoibWV6Z2hhICJ9.kHqTgCvMJKpEIpqNSx9Bgc_f-AcKeUE6EScEjEIXskI";
     }
 
 

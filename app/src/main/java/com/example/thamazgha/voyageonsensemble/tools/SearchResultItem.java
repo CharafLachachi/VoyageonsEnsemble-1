@@ -10,7 +10,9 @@ public class SearchResultItem {
     private String hotelName;
 
 
-    private String userId;
+
+
+    private String idUser;
 
     public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName) {
         this.img_url = img_url;
@@ -70,11 +72,12 @@ public class SearchResultItem {
         this.hotelName = hotelName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getIdUser() {
+        return idUser;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
+
 }

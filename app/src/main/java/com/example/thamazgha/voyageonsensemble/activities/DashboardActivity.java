@@ -4,6 +4,7 @@ package com.example.thamazgha.voyageonsensemble.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,8 +54,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,9 +68,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //drawer.addDrawerListener(toggle);
+        //toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -173,7 +175,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onResponse(JSONArray response) {
                 try {
-                    mCustomAdapter = new CustomAdapter(DashboardActivity.this, mPublicationList,DashboardActivity.this);
+                    //mCustomAdapter = new CustomAdapter(DashboardActivity.this, mPublicationList,DashboardActivity.this);
                     mRecyclerView.setAdapter(mCustomAdapter);
 
                     for (int i = 0; i < response.length(); i++) {
@@ -214,6 +216,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
 
     }
+
 
 
 }
