@@ -38,7 +38,6 @@
 
     <string name="action_example">Example action</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="disconnect">disconnect</string>
     <string name="account">account</string>
     <string name="title_activity_profile">ProfileActivity</string>

@@ -24,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="72dp"
         android:layout_marginBottom="30dp"
-        android:layout_above="@+id/connexion_cps" />
+        android:layout_above="@+id/connexion_cps"
+        />
 
     <LinearLayout
         android:id="@+id/connexion_cps"
@@ -49,8 +50,9 @@
             android:singleLine="true"
             android:fontFamily="@font/main_font"
             android:textColorHint="@color/colorText"
+            android:textColor="#000"
             android:backgroundTint="@color/colorText"
-            android:text="mezgha@gmail.com"/>
+            android:text="hmida@gmail.com"/>
 
         <EditText
             android:id="@+id/password"
@@ -67,7 +69,8 @@
             android:singleLine="true"
             android:textColorHint="@color/colorText"
             android:backgroundTint="@color/colorText"
-            android:text="pass" />
+            android:text="pass"
+            android:textColor="#000"/>
 
         <Button
             android:id="@+id/login_btn"
