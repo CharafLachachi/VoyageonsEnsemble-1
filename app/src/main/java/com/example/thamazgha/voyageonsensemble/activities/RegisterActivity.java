@@ -77,6 +77,7 @@ public class RegisterActivity extends AppCompatActivity  {
     private  EditText lastname;
     private EditText password;
     private AutoCompleteTextView email;
+    private TextView goToLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +88,20 @@ public class RegisterActivity extends AppCompatActivity  {
         firstname = findViewById(R.id.firstname);
         lastname = findViewById(R.id.lastname);
         password = findViewById(R.id.password);
+        goToLogin = findViewById(R.id.login);
 
         Button formBtn = (Button) findViewById(R.id.sign_up_button);
         formBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRegister();
+            }
+        });
+
+        goToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectToLogin();
             }
         });
     }
@@ -155,6 +164,7 @@ public class RegisterActivity extends AppCompatActivity  {
         queue.add(req);
 
     }
+
     private void redirectToLogin(){
         Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(loginIntent);
