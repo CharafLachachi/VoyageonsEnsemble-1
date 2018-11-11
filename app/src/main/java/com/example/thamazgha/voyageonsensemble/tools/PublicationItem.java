@@ -10,15 +10,16 @@ public class PublicationItem {
     private String chekInDate;
     private String city;
     private String hotelName;
-
+    private String picture;
     private String userNameOwner;
-
-
+    private String ownerName;
+    private int abonnesCount;
 
 
     public PublicationItem(int pub_id, String img_url, String userNameOwner, double roomPrice,
                            int nbPers, String checkOutDate, String chekInDate,
-                           String city, String hotelName) {
+                           String city, String hotelName, String picture,String ownerName
+    ,int abonnesCount) {
         this.pub_id = pub_id;
         this.img_url = img_url;
         this.roomPrice = roomPrice;
@@ -28,6 +29,9 @@ public class PublicationItem {
         this.city = city;
         this.hotelName = hotelName;
         this.userNameOwner = userNameOwner;
+        this.picture = picture;
+        this.ownerName = ownerName;
+        this.abonnesCount = abonnesCount;
     }
 
 
@@ -103,4 +107,27 @@ public class PublicationItem {
         this.userNameOwner = userNameOwner;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public int getAbonnesCount() {
+        return abonnesCount;
+    }
+
+    public void setAbonnesCount(int abonnesCount) {
+        this.abonnesCount = abonnesCount;
+    }
 }

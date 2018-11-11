@@ -196,7 +196,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                         int pub_id = publication.getInt("pub_id");
 
-                        mPublicationList.add(new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+                       // mPublicationList.add(new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
                         mCustomAdapter.notifyDataSetChanged();
                     }
 

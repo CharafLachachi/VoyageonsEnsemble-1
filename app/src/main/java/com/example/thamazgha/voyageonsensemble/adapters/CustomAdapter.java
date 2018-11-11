@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,18 +73,25 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
         final String chekInDate = currentItem.getChekInDate();
         final String city = currentItem.getCity();
         final String hotelName = currentItem.getHotelName();
-
+        String picture_url = currentItem.getPicture();
         final int pub_id = currentItem.getPub_id();
-        publicationViewHolder.pub_owner.setText(userNameOwner);
-        publicationViewHolder.roomPrice.setText("Price : " + roomPrice);
-        publicationViewHolder.nbPers.setText(nbPers + " participants");
+        final String ownerName = currentItem.getOwnerName();
+        // Jai change pub_id peut poser probelem pour join
+        publicationViewHolder.pub_owner.setText(ownerName);
+        publicationViewHolder.roomPrice.setText(String.valueOf(roomPrice));
+        publicationViewHolder.nbPers.setText(String.valueOf(nbPers));
         publicationViewHolder.checkOutDate.setText(checkOutDate);
         publicationViewHolder.chekInDate.setText(chekInDate);
-        publicationViewHolder.city.setText("Destination : " + city);
-        publicationViewHolder.hotelName.setText("Hotel : " + hotelName);
+        publicationViewHolder.city.setText(city);
+        publicationViewHolder.hotelName.setText(hotelName);
+        if (currentItem.getAbonnesCount() == nbPers)
+        publicationViewHolder.join.setEnabled(false);
 
 
-        Picasso.with(context).load(img_url).into(publicationViewHolder.meteo);
+
+        Picasso.with(context).load(img_url).fit().into(publicationViewHolder.meteo);
+        Picasso.with(context).load(picture_url).into(publicationViewHolder.picture);
+
         publicationViewHolder.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,15 +232,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
         public TextView chekInDate;
         public TextView city;
         public TextView hotelName;
-
+        public ImageView picture;
         public Button join;
         public Button quit;
 
-        public ConstraintLayout parentLayaout;
+
+        public RelativeLayout parentLayaout;
 
         public PublicationViewHolder(@NonNull View itemView) {
             super(itemView);
             meteo = itemView.findViewById(R.id.meteo);
+            picture = itemView.findViewById(R.id.picture);
             pub_owner = itemView.findViewById(R.id.owner);
             roomPrice = itemView.findViewById(R.id.roomPrice);
             nbPers = itemView.findViewById(R.id.nbPrs);
@@ -242,6 +253,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
             join = itemView.findViewById(R.id.join);
             quit = itemView.findViewById(R.id.quit);
             parentLayaout = itemView.findViewById(R.id.parent_layaout);
+
         }
 
 

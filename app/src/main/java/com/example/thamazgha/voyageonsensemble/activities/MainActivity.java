@@ -23,6 +23,7 @@ import com.example.thamazgha.voyageonsensemble.R;
 import com.example.thamazgha.voyageonsensemble.adapters.CustomAdapter;
 import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,12 +102,21 @@ public class MainActivity extends AppCompatActivity {
                         String hotelName = publication.getString("hotelName");
 
                         JSONObject weather = publication.getJSONObject("weather");
-                        String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
-
+                        String img_url =  "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
+                        String picture_url = publication.getString("picture");;
                         int pub_id = publication.getInt("pub_id");
-
+                        String ownerName = null;
+                        JSONArray abonnes = publication.getJSONArray("abonnes");
+                        for (int j=0; j<abonnes.length(); j++){
+                            JSONObject abonne = abonnes.getJSONObject(i);
+                            if (abonne.getInt("abonne_id") == Integer.parseInt(pub_owner)){
+                                ownerName = abonne.getString("firstname");
+                                break;
+                            }
+                        }
+                        int abonne_count = abonnes.length();
                         getAbonneName(publication);
-                        mPublicationList.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+                        mPublicationList.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,ownerName,abonne_count));
                         mCustomAdapter.notifyDataSetChanged();
                     }
 

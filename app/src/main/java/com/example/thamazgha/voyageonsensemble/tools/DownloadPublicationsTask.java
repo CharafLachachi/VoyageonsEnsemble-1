@@ -53,7 +53,8 @@ public class DownloadPublicationsTask extends AsyncTask<Integer,Void,ArrayList<P
                         JSONObject weather = publication.getJSONObject("weather");
                         String img_url = weather.getString("icon");
 
-                        publications_local_list.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
+
+                       // publications_local_list.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
