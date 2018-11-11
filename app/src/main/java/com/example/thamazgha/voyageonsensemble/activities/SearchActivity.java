@@ -24,10 +24,8 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.example.thamazgha.voyageonsensemble.R;
-import com.example.thamazgha.voyageonsensemble.adapters.CustomAdapter;
 import com.example.thamazgha.voyageonsensemble.adapters.SearchResultsAdapter;
 import com.example.thamazgha.voyageonsensemble.services.SearchService;
-import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
 import com.example.thamazgha.voyageonsensemble.tools.SearchResultItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
 
@@ -35,56 +33,66 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.TimeZone;
 
 public class SearchActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-
-    SearchService searchService;
-    ImageView dateButton;
-    Calendar now;
-    String urlsearch;
     private RecyclerView mRecyclerView;
     private SearchResultsAdapter mSearchResultsAdapter;
     private ArrayList<SearchResultItem> mSearchResultsList;
     private Button destination;
+    private EditText pers,price,radius;
+
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    SearchService searchService;
+    ImageView dateButton;
+    Calendar now;
+    String urlsearch;
+    Toolbar toolbar;
+    String date1, date2;
     private TextView dateTextView;
     private TextView timeTextView;
     private boolean mAutoHighlight;
     private Button search;
-    private String localStorage ;
-    public static final String SHARED_PREFS = "sharedPrefs";
-    Toolbar toolbar;
-
+    private String localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        urlsearch = getString(R.string.api) + "/search";
+        searchService = new SearchService(this);
+
+
         /*toolbar*/
         toolbar = (Toolbar) findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
 
-        urlsearch = getString(R.string.api) + "/ic_search";
 
-        searchService = new SearchService(this);
         dateButton = (ImageView) findViewById(R.id.dateButton);
         dateTextView = (TextView) findViewById(R.id.date_range);
-        destination = (Button)  findViewById(R.id.destination);
+        destination = (Button) findViewById(R.id.destination);
         search = (Button) findViewById(R.id.search);
+
+        pers = (EditText) findViewById(R.id.pers);
+        price = (EditText) findViewById(R.id.price);
+        radius = (EditText) findViewById(R.id.radius);
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSearchResultsList = new ArrayList<SearchResultItem>();
 
-        localStorage = getLocalStorage();
-        mSearchResultsAdapter = new SearchResultsAdapter(this, mSearchResultsList,localStorage,this);
+        localStorage = getLocalStorage("token");
+        mSearchResultsAdapter = new SearchResultsAdapter(this, mSearchResultsList, localStorage, this);
         mRecyclerView.setAdapter(mSearchResultsAdapter);
 
 
@@ -110,12 +118,6 @@ public class SearchActivity extends AppCompatActivity implements
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dest = destination.getText().toString();
-                String date1 = searchService.getDate1(dateTextView.getText().toString());
-                String date2 = searchService.getDate2(dateTextView.getText().toString());
-
-                //mSearchResultsList.addAll(searchService.contactApi(urlsearch, dest, date1, date2));
-                //mSearchResultsAdapter.notifyDataSetChanged();
                 contactApi();
                 Toast.makeText(SearchActivity.this, dateTextView.getText(), Toast.LENGTH_SHORT).show();
             }
@@ -126,15 +128,11 @@ public class SearchActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SearchActivity.this, MapsActivity.class);
-                //EditText editText = (EditText) findViewById(R.id.editText);
-                //String message = editText.getText().toString();
-                //intent.putExtra(EXTRA_MESSAGE, message);
                 startActivity(intent);
 
             }
         });
     }
-
 
     @Override
     public void onResume() {
@@ -143,11 +141,14 @@ public class SearchActivity extends AppCompatActivity implements
         if (dpd != null) dpd.setOnDateSetListener(this);
     }
 
-
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         String date = "You picked the following date: From- " + dayOfMonth + "/" + (++monthOfYear) + "/" + year + " To " + dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
         dateTextView.setText(date);
+
+        date1 = dayOfMonth + "/" + (++monthOfYear) + "/" + year;
+        date2 = dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
+
     }
 
     @Override
@@ -155,31 +156,33 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 
-    private String getLocalStorage() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
-        Log.d("tokenn",sharedPreferences.getString("token",""));
-        //return sharedPreferences.getString("token","");
-        //TODO just for test | modify this later
-        return sharedPreferences.getString("token", "");
+    private String getLocalStorage(String s) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Log.d("tokenn", sharedPreferences.getString(s, ""));
+        return sharedPreferences.getString(s, "");
     }
 
 
-
-
-
-    public void contactApi(){
+    public void contactApi() {
         JSONObject json = new JSONObject();
-
+        JSONObject city = new JSONObject();
         try {
-            json.put("destination", destination);
-            json.put("date1", destination);
-            json.put("date2", destination);
-
+            json.put("city", getLocalStorage("cityName"));
+            json.put("checkIn", formateDate(date1));
+            json.put("checkOut", formateDate(date2));
+            json.put("radius",radius.getText());
+            json.put("nbPers",pers.getText());
+            json.put("roomPrice",price.getText());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        Toast.makeText(SearchActivity.this, json.toString(), Toast.LENGTH_LONG).show();
+
         JSONArray jsonarray = new JSONArray();
+        jsonarray.put(json);
+
+
         //TODO ajouter json au jsonarray
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, urlsearch,
@@ -187,10 +190,11 @@ public class SearchActivity extends AppCompatActivity implements
 
             @Override
             public void onResponse(JSONArray response) {
-                Log.d("response",response.toString());
+                Log.d("response", response.toString());
                 try {
                     for (int i = 0; i < response.length(); i++) {
 
+                        Log.e("responnnse",response.toString());
                         JSONObject search_result = response.getJSONObject(i);
                         double roomPrice = search_result.getDouble("roomPrice");
                         String checkOutDate = search_result.getString("checkOutDate");
@@ -220,5 +224,21 @@ public class SearchActivity extends AppCompatActivity implements
         QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
 
     }
+
+    private String formateDate(String date) {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        df.setTimeZone(tz);
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+        String s = "";
+        try {
+            s = df.format(formatter.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+
 }
 

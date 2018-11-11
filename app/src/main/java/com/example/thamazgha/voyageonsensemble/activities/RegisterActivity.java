@@ -172,3 +172,68 @@ public class RegisterActivity extends AppCompatActivity  {
 
 }
 
+/*
+
+    public void contactApi() {
+        JSONObject json = new JSONObject();
+        JSONObject city = new JSONObject();
+        try {
+            JSONArray cities = new JSONArray();
+            city.put("cityName", getLocalStorage("cityName"));
+            cities.put(city);
+            json.put("checkIn", formateDate(date1));
+            json.put("checkOut", formateDate(date2));
+            json.put("cities", cities);
+            Log.e("zzzzzzzzzzzzzzzz", json.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(SearchActivity.this, json.toString(), Toast.LENGTH_LONG).show();
+
+        JSONArray jsonarray = new JSONArray();
+        jsonarray.put(json);
+
+        Log.e("tableauuuu", jsonarray.toString());
+        //TODO ajouter json au jsonarray
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, urlsearch,
+                jsonarray, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d("response", response.toString());
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject search_result = response.getJSONObject(i);
+                        double roomPrice = search_result.getDouble("roomPrice");
+                        String checkOutDate = search_result.getString("checkOutDate");
+                        String chekInDate = search_result.getString("chekInDate");
+                        String city = search_result.getString("city");
+                        String hotelName = search_result.getString("hotelName");
+
+                        JSONObject weather = search_result.getJSONObject("weather");
+                        String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
+
+                        mSearchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName));
+                        mSearchResultsAdapter.notifyDataSetChanged();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                error.printStackTrace();
+            }
+        }
+        );
+        QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
+
+    }
+ */
+
