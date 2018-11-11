@@ -28,7 +28,7 @@
     <string name="prompt_lastname">Lastname</string>
     <string name="action_sign_up">Register</string>
     <string name="action_sign_up_short">Register</string>
-    <string name="api">http://192.168.137.1:8080/DAR_PROJECT</string>
+    <string name="api">http://192.168.0.35:8080/DAR_PROJECT</string>
     <string name="title_activity_scrolling">Search</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Section 1</string>
@@ -40,9 +40,15 @@
     <string name="title_activity_maps">Map</string>
     <string name="disconnect">disconnect</string>
     <string name="account">account</string>
-    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_profile">Voyageons Ensemble</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
+
+    <string name="your_profile">Your Profile</string>
+    <string name="profile">Profile</string>
+    <string name="personnal_posts">My Posts</string>
+    <string name="posts_of_interest">Favorites</string>
+
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>
