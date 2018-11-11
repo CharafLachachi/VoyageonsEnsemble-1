@@ -131,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             String owner = publication.getString("owner");
             JSONObject abonnes = publication.getJSONObject("abonnes");
-
+            //TODO verifier si c'est le owner mettre son nom
+            //TODO verifier si on atteint pas le nombre de personnes
             Log.i("abonnes",abonnes.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
     private void logout() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage("Do you want to exit?");
+        builder.setIcon(R.drawable.icon);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
