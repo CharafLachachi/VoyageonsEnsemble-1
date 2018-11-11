@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_profile_info"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/profile" />
+
+
+    <item
+        android:id="@+id/nav_personnal_posts"
+        android:icon="@drawable/ic_message_black_24dp"
+        android:title="@string/personnal_posts" />
+
+    <item
+        android:id="@+id/nav_posts_of_interest"
+        android:icon="@drawable/ic_favorite_black_24dp"
+        android:title="@string/posts_of_interest"
+        />
+
+</menu>

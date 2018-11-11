@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/personnal_posts_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:text="Your Have 0 Personnal Posts"
+        android:textColor="@color/colorAccent"
+        android:background="@android:color/transparent"/>
+      <!--  android:layout_marginTop="?attr/actionBarSize"-->
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/personnal_posts_header"/>
+
+
+    <!-- A RecyclerView with some commonly used attributes -->
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/personnal_posts_header"
+        android:id="@+id/rv_personnal_posts"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        />
+
+</RelativeLayout>
