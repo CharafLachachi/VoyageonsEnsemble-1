@@ -6,13 +6,17 @@
     <color name="primary_text">#000000</color>
 
     <color name="accent">#26c6da</color>
-
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
 
     <color name="colorSearchBtn">#011eff</color>
     <color name="colorSearchBackground">#fead00</color>
+
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="green">#6aff00</color>
+    <color name="white">#00fffcfc</color>
 
     <color name="loginbackgroundcolor">#E43F3F</color>
     <color name="colorButton">#E30425</color>

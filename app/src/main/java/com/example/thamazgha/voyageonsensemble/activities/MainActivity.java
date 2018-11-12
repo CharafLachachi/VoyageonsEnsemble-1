@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.ic_account:
                 msg = "account";
-                //intent = new Intent(this, AccountActivity.class);
-                //startActivity(intent);
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 break;
 
         }
