@@ -19,9 +19,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
             android:src="@drawable/nobody_m"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"
-           />
+            app:civ_border_color="@color/primary_light"
+            app:civ_border_width="2dp" />
 
 
         <LinearLayout
@@ -29,32 +28,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_image"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonSnap"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
-                android:layout_weight="1"
-                android:text="Snap" />
+
+                android:text="snap"
+                app:icon="@drawable/ic_photo_camera_black_24dp"
+
+                />
 
             <Button
                 android:id="@+id/buttonChoose"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_weight="1"
-                android:text="Choose" />
+                android:layout_marginLeft="5dp"
+
+                android:text="choose"
+                app:icon="@drawable/ic_add_a_photo_black_24dp" />
 
 
             <Button
                 android:id="@+id/buttonUpload"
-                android:layout_width="0dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:text="Upload" />
+
+                android:layout_marginLeft="5dp"
+                android:text="upload"
+                app:icon="@drawable/ic_cloud_upload_black_24dp" />
 
         </LinearLayout>
 
@@ -256,17 +265,16 @@
             android:id="@+id/tagview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/first_bar"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             app:lineMargin="5dp"
             app:tagMargin="3dp"
             app:textPaddingBottom="3dp"
             app:textPaddingLeft="10dp"
             app:textPaddingRight="10dp"
-            app:textPaddingTop="3dp"
-            android:layout_below="@+id/first_bar">
-        </me.kaede.tagview.TagView>
+            app:textPaddingTop="3dp"></me.kaede.tagview.TagView>
 
 
         <LinearLayout
@@ -274,6 +282,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tagview">
+
             <fragment
                 android:id="@+id/place_autocomplete_fragment"
                 android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
@@ -293,51 +302,17 @@
             android:background="@android:color/darker_gray" />
 
 
-        <android.support.v7.widget.CardView
-
+        <Button
             android:id="@+id/btn_save_changes"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_below="@id/last_bar"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="left"
-            android:clickable="true"
-            android:elevation="5dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:innerRadius="0dp"
-            android:onClick="onSaveChanges"
-            android:shape="ring"
-            android:thicknessRatio="1.9"
-            app:cardBackgroundColor="@color/green"
-            app:cardCornerRadius="25dp"
-            app:cardUseCompatPadding="true">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingLeft="20dp"
-                android:paddingRight="40dp">
-
-                <ImageView
-                    android:id="@+id/img_create_event_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_check_circle_black_24dp" />
-
-                <TextView
-                    android:id="@+id/lbl_createEvent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/img_create_event_icon"
-                    android:text="Save Changes"
-                    android:textColor="@color/mdtp_white"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/last_bar"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/img_create_event_icon"
+            android:text="Save Changes"
+            android:textSize="18dp"
+            app:icon="@drawable/ic_save_black_24dp" />
     </RelativeLayout>
 </ScrollView>

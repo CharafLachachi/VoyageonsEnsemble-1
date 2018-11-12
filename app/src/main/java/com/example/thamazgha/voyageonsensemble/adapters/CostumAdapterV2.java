@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,18 +61,21 @@ public class CostumAdapterV2 extends RecyclerView.Adapter<CostumAdapterV2.Public
         String chekInDate = currentItem.getChekInDate();
         String city = currentItem.getCity();
         final String hotelName = currentItem.getHotelName();
+        String picture_url = currentItem.getPicture();
 
         final int pub_id = currentItem.getPub_id();
-        publicationViewHolder.pub_owner.setText("owner"+pub_owner);
-        publicationViewHolder.roomPrice.setText("Price : "+roomPrice);
-        publicationViewHolder.nbPers.setText(nbPers+" participants");
+        publicationViewHolder.pub_owner.setText(pub_owner);
+        publicationViewHolder.roomPrice.setText(String.valueOf(roomPrice));
+        publicationViewHolder.nbPers.setText(String.valueOf(nbPers));
         publicationViewHolder.checkOutDate.setText(checkOutDate);
         publicationViewHolder.chekInDate.setText(chekInDate);
-        publicationViewHolder.city.setText("Destination : "+city);
-        publicationViewHolder.hotelName.setText("Hotel : "+hotelName);
+        publicationViewHolder.city.setText(city);
+        publicationViewHolder.hotelName.setText(hotelName);
 
+        publicationViewHolder.meteo.setImageResource(getResourceID("we_"+img_url,"drawable",context));
 
-        Picasso.with(context).load(img_url).into(publicationViewHolder.meteo);
+        Picasso.with(context).load(picture_url).into(publicationViewHolder.picture);
+
         publicationViewHolder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,8 +159,8 @@ public class CostumAdapterV2 extends RecyclerView.Adapter<CostumAdapterV2.Public
         public TextView chekInDate;
         public TextView city;
         public TextView hotelName;
-
-        public CardView cancel;
+        public ImageView picture;
+        public Button cancel;
 
         public ConstraintLayout parentLayaout;
 
@@ -172,6 +176,7 @@ public class CostumAdapterV2 extends RecyclerView.Adapter<CostumAdapterV2.Public
             hotelName = itemView.findViewById(R.id.hotelName);
             cancel = itemView.findViewById(R.id.btn_cancel_travel);
             parentLayaout = itemView.findViewById(R.id.parent_layaout);
+            picture = itemView.findViewById(R.id.picture);
 
         }
     }
@@ -211,7 +216,24 @@ public class CostumAdapterV2 extends RecyclerView.Adapter<CostumAdapterV2.Public
             }
         }
     }
-
+    protected final static int getResourceID
+            (final String resName, final String resType, final Context ctx)
+    {
+        final int ResourceID =
+                ctx.getResources().getIdentifier(resName, resType,
+                        ctx.getApplicationInfo().packageName);
+        if (ResourceID == 0)
+        {
+            throw new IllegalArgumentException
+                    (
+                            "No resource string found with name " + resName
+                    );
+        }
+        else
+        {
+            return ResourceID;
+        }
+    }
 
 
 

@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static Button buttonChoose ;
     private static Button buttonUpload ;
     private static Button buttonSnap;
-    private static CardView buttonSaveChanges;
+    private static Button buttonSaveChanges;
 
     private static PlaceAutocompleteFragment placeAutocompleteFragment;
 
@@ -137,7 +137,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             buttonChoose = (Button) v.findViewById(R.id.buttonChoose);
             buttonUpload = (Button) v.findViewById(R.id.buttonUpload);
             buttonSnap = (Button) v.findViewById(R.id.buttonSnap);
-            buttonSaveChanges = (CardView) v.findViewById(R.id.btn_save_changes);
+            buttonSaveChanges = (Button) v.findViewById(R.id.btn_save_changes);
 
             buttonChoose.setOnClickListener(this);
             buttonUpload.setOnClickListener(this);

@@ -106,16 +106,17 @@ public class PersonnalPostsFragment extends Fragment {
                                 String chekInDate = publication.getString("chekInDate");
                                 String city = publication.getString("city");
                                 String hotelName = publication.getString("hotelName");
+                                String picture_url = publication.getString("picture");
 
                                 JSONObject weather = publication.getJSONObject("weather");
-                                String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
+                                String img_url = weather.getString("icon");
 
                                 int pub_id = publication.getInt("pub_id");
                                 Log.d("puuuuuuuuuuuuuuuuub",Integer.toString(pub_id));
 
                                 // update here
                                 mPublicationList.add(
-                                        new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,null,null,0));
+                                        new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,null,0));
                                 mCustomAdapter.notifyDataSetChanged();
 
                             }

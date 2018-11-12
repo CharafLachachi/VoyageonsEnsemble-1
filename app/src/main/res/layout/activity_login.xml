@@ -52,7 +52,7 @@
             android:textColorHint="@color/colorText"
             android:textColor="#000"
             android:backgroundTint="@color/colorText"
-            android:text="lac.charaf@gmail.com"/>
+            android:text="hmida@gmail.com"/>
 
         <EditText
             android:id="@+id/password"
@@ -69,7 +69,7 @@
             android:singleLine="true"
             android:textColorHint="@color/colorText"
             android:backgroundTint="@color/colorText"
-            android:text="salim"
+            android:text="pass"
             android:textColor="#000"/>
 
         <Button
