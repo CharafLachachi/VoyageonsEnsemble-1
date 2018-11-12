@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONArray response) {
+                Log.e("length",String.valueOf(response.length()));
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject publication = response.getJSONObject(i);
@@ -102,20 +103,20 @@ public class MainActivity extends AppCompatActivity {
                         String hotelName = publication.getString("hotelName");
 
                         JSONObject weather = publication.getJSONObject("weather");
-                        String img_url =  "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
+                        String img_url = weather.getString("icon"); //"http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
                         String picture_url = publication.getString("picture");;
                         int pub_id = publication.getInt("pub_id");
                         String ownerName = null;
                         JSONArray abonnes = publication.getJSONArray("abonnes");
                         for (int j=0; j<abonnes.length(); j++){
-                            JSONObject abonne = abonnes.getJSONObject(i);
+                            JSONObject abonne = abonnes.getJSONObject(j);
                             if (abonne.getInt("abonne_id") == Integer.parseInt(pub_owner)){
                                 ownerName = abonne.getString("firstname");
-                                break;
+                                 break;
                             }
                         }
                         int abonne_count = abonnes.length();
-                        getAbonneName(publication);
+                       // getAbonneName(publication);
                         mPublicationList.add(new PublicationItem(pub_id, img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,ownerName,abonne_count));
                         mCustomAdapter.notifyDataSetChanged();
                     }

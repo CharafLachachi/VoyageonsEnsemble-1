@@ -79,14 +79,15 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         final String chekInDate = currentItem.getChekInDate();
         String city = currentItem.getCity();
         final String hotelName = currentItem.getHotelName();
-
+        String picture_url = currentItem.getPicture();
         searchResultViewHolder.roomPrice.setText("Price : " + roomPrice);
         searchResultViewHolder.checkOutDate.setText(checkOutDate);
         searchResultViewHolder.chekInDate.setText(chekInDate);
         searchResultViewHolder.city.setText("Destination : " + city);
         searchResultViewHolder.hotelName.setText("Hotel : " + hotelName);
-        Picasso.with(context).load(img_url).into(searchResultViewHolder.meteo);
 
+        searchResultViewHolder.meteo.setImageResource(getResourceID("we_"+img_url,"drawable",context));
+        Picasso.with(context).load(picture_url).into(searchResultViewHolder.picture);
 
         searchResultViewHolder.share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +180,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         public TextView city;
         public TextView hotelName;
         public Button share;
+        public ImageView picture;
 
         public ConstraintLayout parentLayaout;
 
@@ -192,6 +194,26 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             hotelName = itemView.findViewById(R.id.hotelName);
             share = itemView.findViewById(R.id.share);
             parentLayaout = itemView.findViewById(R.id.item_search_result);
+            picture = itemView.findViewById(R.id.picture);
+        }
+    }
+
+    protected final static int getResourceID
+            (final String resName, final String resType, final Context ctx)
+    {
+        final int ResourceID =
+                ctx.getResources().getIdentifier(resName, resType,
+                        ctx.getApplicationInfo().packageName);
+        if (ResourceID == 0)
+        {
+            throw new IllegalArgumentException
+                    (
+                            "No resource string found with name " + resName
+                    );
+        }
+        else
+        {
+            return ResourceID;
         }
     }
 }

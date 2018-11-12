@@ -12,6 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.RegisterActivity"
     android:layout_gravity="center"
+    style="@style/AppTheme"
     >
 
     <!-- Login progress -->

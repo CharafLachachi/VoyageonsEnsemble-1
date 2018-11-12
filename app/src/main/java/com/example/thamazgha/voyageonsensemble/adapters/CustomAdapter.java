@@ -2,6 +2,8 @@ package com.example.thamazgha.voyageonsensemble.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -21,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.auth0.android.jwt.JWT;
 import com.example.thamazgha.voyageonsensemble.R;
 import com.example.thamazgha.voyageonsensemble.activities.MainActivity;
 import com.example.thamazgha.voyageonsensemble.tools.PublicationItem;
@@ -37,12 +40,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.PublicationViewHolder> {
     final String api;
     public ArrayList<PublicationItem> publicationsList;
-
+    public static final String SHARED_PREFS = "sharedPrefs";
+    String jwtUser;
     public WeakReference<MainActivity> MainActivityWeakReference;
     private Context context;
+
+
     //DashboardService dashboardService;
 
     public CustomAdapter(Context context, ArrayList<PublicationItem> publicationsList, MainActivity mainActivity) {
@@ -84,12 +92,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
         publicationViewHolder.chekInDate.setText(chekInDate);
         publicationViewHolder.city.setText(city);
         publicationViewHolder.hotelName.setText(hotelName);
+        // Verify publication is full
         if (currentItem.getAbonnesCount() == nbPers)
         publicationViewHolder.join.setEnabled(false);
 
+        // Verify if currentUser is owner of the publication
+        if (isCurrentUserOwnerOfPublication(currentItem.getUserNameOwner())){
+            publicationViewHolder.join.setVisibility(View.GONE);
+            publicationViewHolder.quit.setVisibility(View.GONE);
+        }
 
 
-        Picasso.with(context).load(img_url).fit().into(publicationViewHolder.meteo);
+        publicationViewHolder.meteo.setImageResource(getResourceID("we_"+img_url,"drawable",context));
+        //Picasso.with(context).load(img_url).fit().into(publicationViewHolder.meteo);
         Picasso.with(context).load(picture_url).into(publicationViewHolder.picture);
 
         publicationViewHolder.join.setOnClickListener(new View.OnClickListener() {
@@ -257,5 +272,37 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.Publicatio
         }
 
 
+    }
+
+    private boolean isCurrentUserOwnerOfPublication(String pubOwner){
+        jwtUser = getLocalStorage();
+        JWT jwtuser = new JWT(jwtUser);
+        String currentUserId = jwtuser.getClaim("id").asString();
+        if (currentUserId.equals(pubOwner)) return true;
+        return false;
+    }
+    private String getLocalStorage() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        Log.d("tokenn", sharedPreferences.getString("token", ""));
+        return sharedPreferences.getString("token", "");
+    }
+
+    protected final static int getResourceID
+            (final String resName, final String resType, final Context ctx)
+    {
+        final int ResourceID =
+                ctx.getResources().getIdentifier(resName, resType,
+                        ctx.getApplicationInfo().packageName);
+        if (ResourceID == 0)
+        {
+            throw new IllegalArgumentException
+                    (
+                            "No resource string found with name " + resName
+                    );
+        }
+        else
+        {
+            return ResourceID;
+        }
     }
 }

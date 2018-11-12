@@ -8,19 +8,20 @@ public class SearchResultItem {
     private String chekInDate;
     private String city;
     private String hotelName;
-
+    private String picture;
 
 
 
     private String idUser;
 
-    public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName) {
+    public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName, String picture) {
         this.img_url = img_url;
         this.roomPrice = roomPrice;
         this.checkOutDate = checkOutDate;
         this.chekInDate = chekInDate;
         this.city = city;
         this.hotelName = hotelName;
+        this.picture =picture;
     }
 
 
@@ -80,4 +81,11 @@ public class SearchResultItem {
         this.idUser = idUser;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 }

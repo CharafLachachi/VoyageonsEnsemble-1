@@ -71,7 +71,7 @@ public class SearchService {
                         JSONObject weather = search_result.getJSONObject("weather");
                         String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
 
-                        searchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName));
+                    //    searchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName));
                     }
 
                 } catch (JSONException e) {

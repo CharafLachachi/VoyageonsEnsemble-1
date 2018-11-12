@@ -3,6 +3,7 @@ package com.example.thamazgha.voyageonsensemble.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
@@ -28,6 +32,7 @@ import com.example.thamazgha.voyageonsensemble.adapters.SearchResultsAdapter;
 import com.example.thamazgha.voyageonsensemble.services.SearchService;
 import com.example.thamazgha.voyageonsensemble.tools.SearchResultItem;
 import com.example.thamazgha.voyageonsensemble.volley.QueueSingleton;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,8 +41,10 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class SearchActivity extends AppCompatActivity implements
@@ -107,6 +114,8 @@ public class SearchActivity extends AppCompatActivity implements
                         now.get(Calendar.MONTH),
                         now.get(Calendar.DAY_OF_MONTH)
                 );
+                dpd.setThemeDark(true);
+                dpd.setAccentColor(Color.WHITE);
                 dpd.setAutoHighlight(mAutoHighlight);
                 dpd.show(getFragmentManager(), "Datepickerdialog");
 
@@ -146,8 +155,10 @@ public class SearchActivity extends AppCompatActivity implements
         String date = "You picked the following date: From- " + dayOfMonth + "/" + (++monthOfYear) + "/" + year + " To " + dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
         dateTextView.setText(date);
 
-        date1 = dayOfMonth + "/" + (++monthOfYear) + "/" + year;
-        date2 = dayOfMonthEnd + "/" + (++monthOfYearEnd) + "/" + yearEnd;
+        //ZonedDateTime zdt = ZonedDateTime.of(year,monthOfYear,dayOfMonth,0,0,0,0,TimeZone.getDefault().toZoneId());
+
+        date1 = year  + "-" + (++monthOfYear) + "-" + dayOfMonth;
+        date2 =yearEnd  + "-" + (++monthOfYearEnd) + "-" + dayOfMonthEnd;
 
     }
 
@@ -164,34 +175,41 @@ public class SearchActivity extends AppCompatActivity implements
 
 
     public void contactApi() {
-        JSONObject json = new JSONObject();
-        JSONObject city = new JSONObject();
+       final JSONObject json = new JSONObject();
+
         try {
-            json.put("city", getLocalStorage("cityName"));
-            json.put("checkIn", formateDate(date1));
-            json.put("checkOut", formateDate(date2));
+            //create city json
+            // create cities array
+            JSONArray jsonarray = new JSONArray();
+            jsonarray.put(getLocalStorage("cityName"));
+            // put cities array in request json
+            json.put("cities",jsonarray);
+            json.put("chekInDate", date1+"T22:00:00.000Z");
+            json.put("checkOutDate", date2+"T22:00:00.000Z");
             json.put("radius",radius.getText());
             json.put("nbPers",pers.getText());
-            json.put("roomPrice",price.getText());
+            json.put("price",price.getText());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         Toast.makeText(SearchActivity.this, json.toString(), Toast.LENGTH_LONG).show();
 
-        JSONArray jsonarray = new JSONArray();
-        jsonarray.put(json);
+
 
 
         //TODO ajouter json au jsonarray
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, urlsearch,
-                jsonarray, new Response.Listener<JSONArray>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, urlsearch,
+                 new Response.Listener<String>() {
 
             @Override
-            public void onResponse(JSONArray response) {
-                Log.d("response", response.toString());
+            public void onResponse(String respon) {
+
+
                 try {
+                    Log.d("response", respon);
+                    JSONArray response = new JSONArray(respon);
                     for (int i = 0; i < response.length(); i++) {
 
                         Log.e("responnnse",response.toString());
@@ -201,11 +219,11 @@ public class SearchActivity extends AppCompatActivity implements
                         String chekInDate = search_result.getString("chekInDate");
                         String city = search_result.getString("city");
                         String hotelName = search_result.getString("hotelName");
-
+                        String picture_url = search_result.getString("picture");
                         JSONObject weather = search_result.getJSONObject("weather");
-                        String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
+                        String img_url = weather.getString("icon");
 
-                        mSearchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName));
+                        mSearchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName,picture_url));
                         mSearchResultsAdapter.notifyDataSetChanged();
                     }
 
@@ -219,23 +237,31 @@ public class SearchActivity extends AppCompatActivity implements
                 // Toast.makeText(DashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
-        }
-        );
-        QueueSingleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
+        }){
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return json.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+        QueueSingleton.getInstance(this).addToRequestQueue(stringRequest);
 
     }
 
     private String formateDate(String date) {
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        df.setTimeZone(tz);
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.FRANCE);
+        DateFormat formatter = new SimpleDateFormat("yy/MM/dd");
         String s = "";
         try {
             s = df.format(formatter.parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        Log.e("Date",s);
         return s;
     }
 
