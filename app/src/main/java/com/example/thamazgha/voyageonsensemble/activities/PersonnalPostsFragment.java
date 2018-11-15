@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class PersonnalPostsFragment extends Fragment {
 
 
-    static JWT token ;
+    public static JWT token ;
 
     private CostumAdapterV2 mCustomAdapter;
     private ArrayList<PublicationItem> mPublicationList;

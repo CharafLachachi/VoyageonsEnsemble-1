@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/comment_parent_layout">
+
+    <View
+        android:id="@+id/comment_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/comment_user_img"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/comment_user_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/nobody_m"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/comment_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold|italic"
+        android:text="Username"
+        android:layout_toRightOf="@+id/comment_user_img"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:id="@+id/comment_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="Added on :  date "
+        android:paddingLeft="20dp"
+        android:layout_below="@+id/comment_username"
+        android:layout_toRightOf="@+id/comment_user_img"/>
+
+    <TextView
+        android:id="@+id/comment_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="this is a comment"
+        android:layout_toRightOf="@+id/comment_user_img"
+        android:layout_below="@+id/comment_date"
+        android:layout_marginLeft="20dp"/>
+
+    <View
+        android:id="@+id/comment_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/comment_text"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/darker_gray" />
+</RelativeLayout>

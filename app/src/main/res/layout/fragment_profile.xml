@@ -41,7 +41,6 @@
 
                 android:text="snap"
                 app:icon="@drawable/ic_photo_camera_black_24dp"
-
                 />
 
             <Button
@@ -51,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
 
-                android:text="choose"
-                app:icon="@drawable/ic_add_a_photo_black_24dp" />
+                android:text="pick"
+                app:icon="@drawable/ic_photo_library_black_24dp" />
 
 
             <Button
@@ -60,10 +59,11 @@
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:padding="3dp"
                 android:layout_marginLeft="5dp"
                 android:text="upload"
-                app:icon="@drawable/ic_cloud_upload_black_24dp" />
+                app:icon="@drawable/ic_cloud_upload_black_24dp"
+             />
 
         </LinearLayout>
 
@@ -302,17 +302,52 @@
             android:background="@android:color/darker_gray" />
 
 
-        <Button
+        <android.support.v7.widget.CardView
+
             android:id="@+id/btn_save_changes"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/last_bar"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/img_create_event_icon"
-            android:text="Save Changes"
-            android:textSize="18dp"
-            app:icon="@drawable/ic_save_black_24dp" />
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@id/last_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="left"
+            android:clickable="true"
+            android:elevation="5dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:innerRadius="0dp"
+            android:onClick="onSaveChanges"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
+            app:cardBackgroundColor="@color/green"
+            app:cardCornerRadius="25dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="40dp">
+
+                <ImageView
+                    android:id="@+id/img_create_event_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_check_circle_black_24dp" />
+
+                <TextView
+                    android:id="@+id/lbl_createEvent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_create_event_icon"
+                    android:text="Save Changes"
+                    android:textColor="@color/mdtp_white"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
     </RelativeLayout>
 </ScrollView>
