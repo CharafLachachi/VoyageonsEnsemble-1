@@ -1,5 +1,7 @@
 package com.example.thamazgha.voyageonsensemble.tools;
 
+import org.json.JSONObject;
+
 public class SearchResultItem {
 
     private String img_url;
@@ -9,12 +11,13 @@ public class SearchResultItem {
     private String city;
     private String hotelName;
     private String picture;
+    private JSONObject receivedJson;
 
 
 
     private String idUser;
 
-    public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName, String picture) {
+    public SearchResultItem(String img_url, double roomPrice, String checkOutDate, String chekInDate, String city, String hotelName, String picture, JSONObject receivedJson) {
         this.img_url = img_url;
         this.roomPrice = roomPrice;
         this.checkOutDate = checkOutDate;
@@ -22,6 +25,7 @@ public class SearchResultItem {
         this.city = city;
         this.hotelName = hotelName;
         this.picture =picture;
+        this.receivedJson = receivedJson;
     }
 
 
@@ -87,5 +91,13 @@ public class SearchResultItem {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public JSONObject getReceivedJson() {
+        return receivedJson;
+    }
+
+    public void setReceivedJson(JSONObject receivedJson) {
+        this.receivedJson = receivedJson;
     }
 }

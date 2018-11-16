@@ -223,7 +223,7 @@ public class SearchActivity extends AppCompatActivity implements
                         JSONObject weather = search_result.getJSONObject("weather");
                         String img_url = weather.getString("icon");
 
-                        mSearchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName,picture_url));
+                        mSearchResultsList.add(new SearchResultItem(img_url, roomPrice, checkOutDate, chekInDate, city, hotelName,picture_url,search_result));
                         mSearchResultsAdapter.notifyDataSetChanged();
                     }
 

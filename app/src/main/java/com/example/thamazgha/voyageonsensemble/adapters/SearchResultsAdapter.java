@@ -118,18 +118,19 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
         SearchResultItem currentItem = searchresultlist.get(pos);
         currentItem.setIdUser("1");/*this.localStorage.getClaim("id").asString()*/
-        String currentJson = new Gson().toJson(currentItem);
+       // String currentJson = new Gson().toJson(currentItem.getReceivedJson());
 
         JSONObject json = null;
         try {
-            json = new JSONObject(currentJson);
+            //json = new JSONObject(currentJson);
+            currentItem.getReceivedJson().put("idUser",Integer.parseInt(this.localStorage.getClaim("id").asString()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, api+"/sharePublication", json, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, api+"/sharePublication", currentItem.getReceivedJson(), new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
