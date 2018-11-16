@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class PostsOfInterestFragment extends Fragment {
 
-    static JWT token ;
+    public static JWT token ;
 
     private View v;
     private TextView tv ;
