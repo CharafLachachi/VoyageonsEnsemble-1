@@ -88,7 +88,7 @@ public class PostsOfInterestFragment extends Fragment {
                             for (int i = 0; i < response.length(); i++) {
 
                                 JSONObject publication = response.getJSONObject(i);
-                                int pub_owner = publication.getInt("owner");
+                                String pub_owner = publication.getString("owner");
                                 double roomPrice = publication.getDouble("roomPrice");
                                 int nbPers = publication.getInt("nbPers");
                                 String checkOutDate = publication.getString("checkOutDate");
@@ -98,8 +98,20 @@ public class PostsOfInterestFragment extends Fragment {
                                 JSONObject weather = publication.getJSONObject("weather");
                                 String img_url = "http://openweathermap.org/img/w/" + weather.getString("icon") + ".png";
                                 int pub_id = publication.getInt("pub_id");
-                                mPublicationList.add(new PublicationItem(pub_id,img_url, ""+pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,null,null,0));
+                                String picture_url = publication.getString("picture");
+                                String ownerName = null;
+                                JSONArray abonnes = publication.getJSONArray("abonnes");
+                                for (int j=0; j<abonnes.length(); j++){
+                                    JSONObject abonne = abonnes.getJSONObject(j);
+                                    if (abonne.getInt("abonne_id") == Integer.parseInt(pub_owner)){
+                                        ownerName = abonne.getString("firstname");
+                                        break;
+                                    }
+                                }
+                                int abonne_count = abonnes.length();
+                                mPublicationList.add(new PublicationItem(pub_id,img_url, ""+pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,ownerName,abonne_count));
                                 mCustomAdapter.notifyDataSetChanged();
+
 
                             }
 

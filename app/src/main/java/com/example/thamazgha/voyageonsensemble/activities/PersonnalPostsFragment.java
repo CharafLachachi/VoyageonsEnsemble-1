@@ -114,9 +114,19 @@ public class PersonnalPostsFragment extends Fragment {
                                 int pub_id = publication.getInt("pub_id");
                                 Log.d("puuuuuuuuuuuuuuuuub",Integer.toString(pub_id));
 
+                                String ownerName = null;
+                                JSONArray abonnes = publication.getJSONArray("abonnes");
+                                for (int j=0; j<abonnes.length(); j++){
+                                    JSONObject abonne = abonnes.getJSONObject(j);
+                                    if (abonne.getInt("abonne_id") == Integer.parseInt(pub_owner)){
+                                        ownerName = abonne.getString("firstname");
+                                        break;
+                                    }
+                                }
+                                int abonne_count = abonnes.length();
                                 // update here
                                 mPublicationList.add(
-                                        new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,null,0));
+                                        new PublicationItem(pub_id,img_url, pub_owner, roomPrice, nbPers, checkOutDate, chekInDate, city, hotelName,picture_url,ownerName,abonne_count));
                                 mCustomAdapter.notifyDataSetChanged();
 
                             }
