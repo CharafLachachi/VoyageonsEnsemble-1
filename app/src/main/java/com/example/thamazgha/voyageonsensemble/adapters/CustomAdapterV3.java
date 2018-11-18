@@ -67,6 +67,7 @@ public class CustomAdapterV3 extends RecyclerView.Adapter<CustomAdapterV3.Public
         return new PublicationViewHolder(v);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull final PublicationViewHolder publicationViewHolder, final int position) {
         final PublicationItem currentItem = publicationsList.get(position);
@@ -79,6 +80,7 @@ public class CustomAdapterV3 extends RecyclerView.Adapter<CustomAdapterV3.Public
         String chekInDate = currentItem.getChekInDate();
         String city = currentItem.getCity();
         final String hotelName = currentItem.getHotelName();
+        String picture_url = currentItem.getPicture();
 
         final int pub_id = currentItem.getPub_id();
         publicationViewHolder.pub_owner.setText("owner"+pub_owner);
@@ -88,9 +90,13 @@ public class CustomAdapterV3 extends RecyclerView.Adapter<CustomAdapterV3.Public
         publicationViewHolder.chekInDate.setText(chekInDate);
         publicationViewHolder.city.setText("Destination : "+city);
         publicationViewHolder.hotelName.setText("Hotel : "+hotelName);
-        //  publicationViewHolder.meteo.setImageResource(getResourceID("we_"+img_url,"drawable",context));
+        img_url = img_url.replaceAll("http://openweathermap.org/img/w/","");
+        img_url = img_url.replaceAll(".png","");
+        Log.i("img url", img_url);
+        publicationViewHolder.meteo.setImageResource(getResourceID("we_"+img_url,"drawable",context));
 
-        Picasso.with(context).load(img_url).into(publicationViewHolder.meteo);
+        Picasso.with(context).load(picture_url).into(publicationViewHolder.picture);
+
         publicationViewHolder.unsub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
