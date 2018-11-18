@@ -28,7 +28,7 @@
     <string name="prompt_lastname">Lastname</string>
     <string name="action_sign_up">Register</string>
     <string name="action_sign_up_short">Register</string>
-    <string name="api">http://192.168.1.40:8080/DAR_PROJECT</string>
+    <string name="api">http://35.190.214.143:8080/DAR_PROJECT</string>
     <string name="title_activity_scrolling">Search</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Section 1</string>

@@ -6,7 +6,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".activities.LoginActivity"
-    style="@style/AppTheme">
+    style="@style/AppTheme"
+    android:id="@+id/parent">
 
     <!-- TODO center form in the middle -->
     <ProgressBar

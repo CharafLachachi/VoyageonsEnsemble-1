@@ -74,7 +74,8 @@
            <android.support.constraint.ConstraintLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:layout_below="@+id/hotelName">
+               android:layout_below="@+id/hotelName"
+               >
                 <ImageView
                     android:id="@+id/dateImg"
                     android:layout_width="wrap_content"
@@ -141,7 +142,8 @@
                     android:id="@+id/meteo"
                     android:layout_width="70sp"
                     android:layout_height="70sp"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                   />
            </android.support.constraint.ConstraintLayout>
         </RelativeLayout>
         <LinearLayout
