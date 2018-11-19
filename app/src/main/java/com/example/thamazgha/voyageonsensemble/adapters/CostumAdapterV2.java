@@ -105,7 +105,7 @@ public class CostumAdapterV2 extends RecyclerView.Adapter<CostumAdapterV2.Public
                     e.printStackTrace();
                 }
 
-                String url = "http://192.168.0.35:8080/DAR_PROJECT" + "/DeletePublication";
+                String url = personnal_posts_frag.getActivity().getString(R.string.api)  + "/DeletePublication";
 
 
                 CustomJsonRequest cr = new CustomJsonRequest(Request.Method.POST, url, json,

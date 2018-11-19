@@ -116,7 +116,8 @@ public class CustomAdapterV3 extends RecyclerView.Adapter<CustomAdapterV3.Public
                     e.printStackTrace();
                 }
 
-                String url = "http://192.168.0.35:8080/DAR_PROJECT" + "/UnsubscribeToPublication";
+                String url = posts_of_interest_frag.getActivity().getString(R.string.api) + "/UnsubscribeToPublication";
+                // Toast.makeText(posts_of_interest_frag.getActivity(), "url: "+url, Toast.LENGTH_SHORT).show();
 
 
                 CustomJsonRequest cr = new CustomJsonRequest(Request.Method.POST, url, json,
